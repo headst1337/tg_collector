@@ -1,0 +1,165 @@
+<style>
+    body {
+        background-color: #111;
+        color: #fff;
+        font-family: monospace;
+        padding: 20px;
+    }
+
+    h1 {
+        color: #00ff00;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        table-layout: fixed;
+    }
+
+    th, td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        word-break: break-word;
+        white-space: normal;
+        border-right: 1px solid rgba(255, 255, 255, 0.1); /* Добавлено для вертикальных разделителей */
+    }
+
+    th:last-child,
+    td:last-child {
+        border-right: none; /* Удаление правого разделителя для последнего столбца */
+    }
+
+    th {
+        background-color: #333;
+    }
+
+    tr:nth-child(even) {
+        background-color: #222;
+    }
+
+    a.button {
+        color: #fff;
+        margin-right: 10px;
+        padding: 10px 20px;
+        background-color: #222;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s ease;
+    }
+
+    a.button:hover {
+        background-color: #00ff00;
+    }
+
+    a.button.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    .date-container {
+        margin-bottom: 10px;
+        display: inline-block;
+    }
+
+    .date-container label {
+        color: #fff;
+        margin-right: 10px;
+    }
+
+    .date-container input[type="date"] {
+        padding: 5px;
+        border-radius: 4px;
+        border: 1px solid #aaa;
+        background-color: #222;
+        color: #fff;
+    }
+
+    .date-container button {
+        padding: 5px 10px;
+        border-radius: 4px;
+        border: none;
+        background-color: #222;
+        color: #fff;
+        font-size: 14px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .date-container button:hover {
+        background-color: #00ff00;
+    }
+
+    .date-container button.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    .download-button {
+        display: inline-block;
+        color: #fff;
+        margin-right: 10px;
+        padding: 10px 20px;
+        background-color: #222;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .download-button:hover {
+        background-color: #00ff00;
+    }
+
+    .download-button.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+</style>
+
+<h1>Dashboard</h1>
+
+<form method="get" action="{{ url_for('admin.dashboard') }}">
+    <div class="date-container">
+        <label for="date">Выберите дату:</label>
+        <input type="date" id="date" name="date">
+        <button class="button" type="submit">Поиск по дате</button>
+    </div>
+</form>
+
+<form method="get" action="{{ url_for('admin.download') }}">
+    <input type="hidden" name="date" value="{{ request.args.get('date') }}">
+    <button class="button download-button" type="submit">Скачать</button>
+</form>
+
+{% if posts %}
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ссылка на пост</th>
+            <th>Ссылка на группу</th>
+            <th>Публикация</th>
+            <th>Платежные данные</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for post in posts %}
+            <tr>
+                <td>{{ post.id }}</td>
+                <td>{{ post.post_link }}</td>
+                <td>{{ post.group_link }}</td>
+                <td class="body-text">{{ post.body }}</td>
+                <td>{{ post.payment_data|replace('\n', '<br>')|safe }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
