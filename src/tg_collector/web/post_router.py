@@ -6,17 +6,14 @@ from fastapi.responses import FileResponse
 
 from tg_collector.adapters.sqlalchemy_db.repository import PostRepository
 from tg_collector.adapters.generate_exel_report import GenerateExelReport
+from tg_collector.adapters.tgstat_api import TGStatSearchAPI
 from tg_collector.application.parse import FetchDataFromApi
-from tg_collector.application.protocols import (
-    ExternalAPIGateway,
-    DataBaseGateway,
-)
-
 
 from .schemas import DateRequest
 
 
 router = APIRouter(tags=['Post'])
+
 
 @router.get('/api/v1/post/get')
 async def get_posts(
@@ -44,19 +41,20 @@ async def check_post_availability(
 
 @router.post('/api/v1/post/download')
 async def download_posts(
-    request: DateRequest, 
+    request: DateRequest,
     exel_report: Annotated[GenerateExelReport, Depends()]
 ):
     report_file = exel_report.genetare_report(request.dates)
     return FileResponse(
         report_file,
         filename='report.xlsx',
-        media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        media_type='application/vnd.openxmlformats-officedocument.\
+            spreadsheetml.sheet'
     )
 
 
 @router.post('/api/v1/post/fetch')
 async def fetch_data():
-    fetcher = FetchDataFromApi(ExternalAPIGateway, DataBaseGateway)
-    fetcher()
+    fetcher = FetchDataFromApi(TGStatSearchAPI, PostRepository)
+    fetcher.process_fetch()
     return {'status': 'success'}

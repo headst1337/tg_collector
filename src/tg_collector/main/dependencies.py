@@ -1,4 +1,6 @@
-import os
+"""TODO: нужно добавить функцию для инициализации
+параметров из окружения."""
+
 from typing import Any, Generator
 from logging import getLogger
 from functools import lru_cache
@@ -9,10 +11,6 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 
-from tg_collector.adapters.sqlalchemy_db.models import (
-    metadata_obj,
-    mapper_registry,
-)
 
 logger = getLogger(__name__)
 
@@ -20,13 +18,15 @@ logger = getLogger(__name__)
 def init_dependencies(app: FastAPI) -> None:
     pass
 
+
 @lru_cache(maxsize=None)
 def get_engine() -> Engine:
     return create_engine(
-        #os.getenv('SQLALCHEMY_DATABASE_URL'),
-        'mysql+pymysql://devops:0ZRHrpTQVgc3z1cR@85.234.107.240/dev',
+        # os.getenv('SQLALCHEMY_DATABASE_URL'),
+        'mysql+pymysql://ipanov:ipanov@127.0.0.1/tg_stat',
         pool_pre_ping=True,
     )
+
 
 def new_session() -> Generator[Session, None, Any]:
     session_maker = sessionmaker(bind=get_engine())

@@ -1,13 +1,12 @@
 from datetime import datetime
-from typing import List
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 
 class DateRequest(BaseModel):
-    dates: List[str]
+    dates: list[str]
 
-    @validator('dates')
+    @field_validator('dates')
     def validate_date_format(cls, v):
         for date_str in v:
             try:

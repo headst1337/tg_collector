@@ -1,7 +1,6 @@
-from typing import List
+import tempfile
 from io import BytesIO
 from datetime import datetime
-import tempfile
 
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
@@ -16,25 +15,25 @@ class GenerateExelReport(GenerateDateReport):
     def __init__(self) -> None:
         self.posrt_repository = PostRepository()
 
-    def genetare_report(self, dates: List[str]) -> str:
+    def genetare_report(self, dates: list[str]) -> str:
         data = self.__prepare_data(dates)
-        file_content =  self.__build_file_conent(data)
+        file_content = self.__build_file_conent(data)
         return self.__build_file(file_content)
-    
-    def __prepare_data(self, dates: List[str]) -> List[Post]:
-        data = []
+
+    def __prepare_data(self, dates: list[str]) -> list[Post]:
+        data: list[Post] = []
         for date in dates:
-            date = datetime.strptime(date, "%d-%m-%Y").date()
-            data.extend(self.posrt_repository.get_by_date(date))
+            date_datetime = datetime.strptime(date, "%d-%m-%Y").date()
+            data.extend(self.posrt_repository.get_by_date(date_datetime))
         return data
-    
+
     def __build_file(self, file_content: BytesIO) -> str:
         with tempfile.NamedTemporaryFile(delete=False) as temp_file:
             temp_file.write(file_content.getvalue())
             return temp_file.name
-    
-    def __build_file_conent(self, data: List[Post]) -> BytesIO:
-        workbook = Workbook()
+
+    def __build_file_conent(self, data: list[Post]) -> BytesIO:
+        workbook: Workbook = Workbook()
         sheet = workbook.active
         sheet['A1'] = 'ID'
         sheet['B1'] = 'Ссылка на пост'
@@ -73,7 +72,7 @@ class GenerateExelReport(GenerateDateReport):
                 try:
                     if len(str(cell.value)) > max_length:
                         max_length = len(cell.value)
-                except:
+                except BaseException:
                     pass
             adjusted_width = (max_length + 2)
             sheet.column_dimensions[

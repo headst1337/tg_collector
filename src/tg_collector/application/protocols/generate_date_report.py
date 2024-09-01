@@ -1,11 +1,11 @@
 from abc import abstractmethod
-from typing import Protocol, List, TypeVar
-from io import BytesIO
+from typing import Protocol, TypeVar
 
 
 T = TypeVar('T')
 
+
 class GenerateDateReport(Protocol):
     @abstractmethod
-    def genetare_report(self, dates: List[str]) -> str:
+    def genetare_report(self, dates: list[str]) -> str:
         raise NotImplementedError

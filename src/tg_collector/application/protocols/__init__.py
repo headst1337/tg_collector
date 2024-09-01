@@ -1,9 +1,9 @@
 __all__ = [
-    'DataBaseGateway',
-    'ExternalAPIGateway',
+    'PostGateway',
+    'TGStatAPIGateway',
     'GenerateDateReport',
 ]
 
-from .database import DataBaseGateway
-from .external_api import ExternalAPIGateway
+from .post_gateway import PostGateway
+from .tgstat_api_gateway import TGStatAPIGateway
 from .generate_date_report import GenerateDateReport

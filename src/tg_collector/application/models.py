@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 
 @dataclass
-class Post():
+class Post:
     id: int = field(init=False)
     post_link: str
     group_link: str

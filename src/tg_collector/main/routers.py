@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from tg_collector.web import(
+from tg_collector.web import (
     dashboard_router,
     post_router,
 )
